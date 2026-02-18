@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="VisionWorkOrderApp.Views.EquipmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VisionWorkOrderApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="Wheat">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <!-- 왼쪽: 목록 영역 -->
+        <!--DataContext (EquipmentViewModel)를 했기때문에 {Binding Equipments},{Binding SelectedEquipment}을 사용할수 있는것이다.-->
+        <DataGrid Grid.Column="0"
+                  
+                  ItemsSource="{Binding Equipments}"
+                  SelectedItem="{Binding SelectedEquipment}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"
+                                    Binding="{Binding Id}"
+                                    Width="80"/>
+                <DataGridTextColumn Header="설비명"
+                                    Binding="{Binding Name}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!-- 오른쪽: 입력 영역 -->
+        <Border Grid.Column="1"
+                Background="CadetBlue"
+                Padding="15"
+                Margin="0,10,10,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!-- 제목 -->
+                <TextBlock Grid.Row="0"
+                           Text="설비 입력"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,5"/>
+                <!-- 입력 폼 -->
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="설비명"
+                               FontWeight="SemiBold"/>
+                    <!--DataContext (EquipmentViewModel) 가 있기 때문에NewName를 불러올수잇음 -->
+                    <TextBox Text="{Binding NewName,UpdateSourceTrigger=PropertyChanged}"
+                             Height="30"
+                             Margin="0,0,0,5"/>
+                </StackPanel>
+                <!-- 버튼 영역 -->
+                <StackPanel Grid.Row="2">
+                    <Button Content="추가"
+                    Height="35"
+                    Margin="0,10,0,5"
+                    Command="{Binding AddCommand}"/>
+
+                    <Button Content="수정"
+                    Height="35"
+                    Margin="0,5"
+                    Command="{Binding EditCommand}"/>
+
+                    <Button Content="삭제"
+                    Height="35"
+                    Margin="0,5"
+                    Command="{Binding DeleteCommand}"/>
+
+                    <Button Content="초기화"
+                    Height="35"
+                    Margin="0,5"
+                    Command="{Binding ClearCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+    
+</UserControl>
+<!-- ItemsSource="{Binding Equipments}은 ObservableCollection<Equipment>-->
+<!--SelectedItem="{Binding SelectedEquipment}는 EquipmentViewModel 클래스의 SelectedEquipment 속성  -->
+<!--AutoGenerateColumns="False" 거의 수동임 -->
+<!--IsReadOnly="True" : 직접수정불가 ,더블클릭해도 편집 안됨-->
+<!--헷갈림주의 : Binding="{Binding Id}은 ItemsSource를 바라본다-->
+<!--UpdateSourceTrigger : 언제 ViewModel에 값을 전달할지" 결정하는 옵션-->
+<!--PropertyChanged (우리가 쓰는 것)타이핑할 때마다 즉시 ViewModel에 전달-->
+<!--PropertyChanged쓰는 이유 : 실시간 유요성 검사하기위해 타이핑할때마다 체크가능 예) 이름이 너무 깁니다!-->
+    
+    <!--### **흐름:**
+```
+ItemsSource="{Binding Equipments}"
+→ Equipments[0] = Equipment(Id=1, Name="A호")
+→ Equipments[1] = Equipment(Id=2, Name="B호")
+→ Equipments[2] = Equipment(Id=3, Name="C호")
+
+각 행마다:
+Binding="{Binding Id}"   → Equipment.Id
+Binding="{Binding Name}" → Equipment.Name -->
