@@ -14,28 +14,12 @@ using VisionWorkOrderApp.Models;
 
 namespace VisionWorkOrderApp.ViewModels
 {
-    public class EquipmentViewModel : INotifyPropertyChanged
+    public class EquipmentViewModel : BaseViewModel
     {
-        private ObservableCollection<Equipment> equipments;
-
-        // ────────────────
-        // INotifyPropertyChanged
-        // ────────────────
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        // ────────────────
-        // 데이터
-        // ────────────────
-
+        
         public ObservableCollection<Equipment> Equipments { get; set; }
 
         private Equipment _selectedEquipment;
-
-        //질문 이 속성을 Equipment클래스에 작성안하고 여기해 해야되나 ? Equipment클래스에 하면 안되나 ? 
         public Equipment SelectedEquipment
         {
             get { return _selectedEquipment; }
@@ -58,8 +42,11 @@ namespace VisionWorkOrderApp.ViewModels
         public string NewName
         {
             get => _newName;
-            set{ _newName = value;
-                OnPropertyChanged(); }
+            set
+            {
+                _newName = value;
+                OnPropertyChanged();
+            }
         }
         // ────────────────
         // Commands (버튼) XAML 버튼의 Command="{Binding AddCommand}"와 연결
@@ -110,7 +97,6 @@ namespace VisionWorkOrderApp.ViewModels
             {
                 newId = 1;
             }
-            //리스트에 추가
             Equipments.Add(new Equipment(newId, NewName));
 
             // 입력 폼 초기화
@@ -133,9 +119,9 @@ namespace VisionWorkOrderApp.ViewModels
                 MessageBox.Show("입력란을 채워주세요!");
             }
             // 위치 찾기
-            int index = equipments.IndexOf(SelectedEquipment);
+            int index = Equipments.IndexOf(SelectedEquipment);
             // 그 자리에 새 객체로 교체
-            equipments[index] = new Equipment(SelectedEquipment.Id, NewName);
+            Equipments[index] = new Equipment(SelectedEquipment.Id, NewName);
             // 입력 폼 초기화
             ClearForm();
         }
@@ -153,19 +139,19 @@ namespace VisionWorkOrderApp.ViewModels
             // 첫번째 파라미터 : 팝업창 표시될때 메인 텍스트
             // 두번째 파라미터 : 팝업창 제목
             // 세번째 파라미터 :  버튼 종류
-            MessageBoxResult result = MessageBox.Show("정말로 삭제하시겠습니까?","삭제확인",MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show("정말로 삭제하시겠습니까?", "삭제확인", MessageBoxButton.YesNo);
 
             // [예]버튼을 눌렀을때 삭제
-            if (result== MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
-                equipments.Remove(SelectedEquipment);
+                Equipments.Remove(SelectedEquipment);
                 MessageBox.Show("삭제되었습니다.");
             }
         }
         private void ClearForm()
         {
             NewName = "";
-    SelectedEquipment = null;
+            SelectedEquipment = null;
         }
     }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 using VisionWorkOrderApp.Commands;
@@ -14,23 +15,11 @@ using VisionWorkOrderApp.Models;
 
 namespace VisionWorkOrderApp.ViewModels
 {
-    public class WorkOrderViewModel : INotifyPropertyChanged
+    public class WorkOrderViewModel : BaseViewModel
     {
-        // PropertyChanged 이벤트 + 메서드
-        // ([CallerMemberName] : 자동으로 호출한 속성 이름을 채워줌
-        public event PropertyChangedEventHandler PropertyChanged; //UI에게 알려주는 확성기
-
-        public void OnPropertyChanged([CallerMemberName] string name = null) //확성기를 울리는 버튼
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(name));
-            }
-        }
-        public ObservableCollection<WorkOrder> WorkOrders { get; set; } // 속성 (Property) = 필드 + getter + setter를 한 번에!
+        public ObservableCollection<WorkOrder> WorkOrders { get; set; }
 
         private WorkOrder _selectedWorkOrder;
-
         public WorkOrder SelectedWorkOrder
         {
             get => _selectedWorkOrder;
@@ -49,8 +38,12 @@ namespace VisionWorkOrderApp.ViewModels
                 }
             }
         }
+        //────────────────
+        // 설비 목록 (ComboBox용) ComboBox에 표시할 설비 목록
         // ────────────────
-        // 입력 폼속성
+        public ObservableCollection<Equipment> Equipments { get; set; }
+        // ────────────────
+        // 입력 폼속성 (상품이름)
         // ────────────────
 
         private string _newProductName;
@@ -63,7 +56,9 @@ namespace VisionWorkOrderApp.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        // ────────────────
+        // 입력 폼속성 (수량)
+        // ────────────────
         private int _newQuantity;
         public int NewQuantity
         {
@@ -74,7 +69,9 @@ namespace VisionWorkOrderApp.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        // ────────────────
+        // 입력 폼속성 (상태)
+        // ────────────────
         private string _newStatus;
         public string NewStatus
         {
@@ -85,12 +82,31 @@ namespace VisionWorkOrderApp.ViewModels
                 OnPropertyChanged();
             }
         }
+        // ────────────────
+        // 입력 ComboBox (새로운 장비번호)
+        // ────────────────
         private int _newEquipmentId;
         public int NewEquipmentId
         {
             get { return _newEquipmentId; }
             set { _newEquipmentId = value; OnPropertyChanged(); }
         }
+
+        private Equipment _selectedEquipment;
+        public Equipment SelectedEquipment
+        {
+            get { return _selectedEquipment; }
+            set
+            {
+                _selectedEquipment = value; OnPropertyChanged();
+                // ID 자동 설정 
+                if (value != null)
+                {
+                    NewEquipmentId = value.Id;
+                }
+            }
+        }
+
 
         // Command (버튼 동작)
         public ICommand AddCommand { get; set; }
@@ -109,6 +125,14 @@ namespace VisionWorkOrderApp.ViewModels
                  new WorkOrder(2,"노트북 스탠드", 200, "진행중",2),
                  new WorkOrder(3,"무선 마우스", 150, "완료",1)
             };
+            // 설비 목록 초기화
+            Equipments = new ObservableCollection<Equipment>()
+            {
+                new Equipment(1,"검사기 A호"),
+                new Equipment(2,"검사기 B호"),
+                new Equipment(3,"검사기 C호"),
+            };
+
             // Command 초기화
             AddCommand = new RelayCommand(AddWorkOrder);
             EditCommand = new RelayCommand(EditWorkOrder);
@@ -123,25 +147,24 @@ namespace VisionWorkOrderApp.ViewModels
             //유효성 검사
             if (string.IsNullOrWhiteSpace(NewProductName))
             {
-                System.Windows.MessageBox.Show("제품명을 입력하세요!");
+                MessageBox.Show("제품명을 입력하세요!");
                 return;
             }
             if (NewQuantity <= 0)
             {
-                System.Windows.MessageBox.Show("수량을 입력하세요!");
+                MessageBox.Show("수량을 입력하세요!");
                 return;
             }
             if (string.IsNullOrWhiteSpace(NewStatus))
             {
-                System.Windows.MessageBox.Show("상태를 선택하세요!");
+                MessageBox.Show("상태를 선택하세요!");
                 return;
             }
-            if (NewEquipmentId <= 0)
+            if (SelectedEquipment == null)
             {
-                System.Windows.MessageBox.Show("설비ID를 입력하세요!");
+                MessageBox.Show("설비를 선택하세요!");
                 return;
             }
-
             int newId = WorkOrders.Count + 1;
             WorkOrders.Add(new WorkOrder(newId, NewProductName, NewQuantity, NewStatus, NewEquipmentId));
             ClearForm();
@@ -153,16 +176,13 @@ namespace VisionWorkOrderApp.ViewModels
         {
             if (SelectedWorkOrder == null)
             {
-                System.Windows.MessageBox.Show("수정할 항목을 선택하세요!");
+                MessageBox.Show("수정할 항목을 선택하세요!");
                 return;
             }
             int index = WorkOrders.IndexOf(SelectedWorkOrder);
-            WorkOrders[index] = new WorkOrder(SelectedWorkOrder.Id, NewProductName, NewQuantity, NewStatus,NewEquipmentId);
-
+            WorkOrders[index] = new WorkOrder(SelectedWorkOrder.Id, NewProductName, NewQuantity, NewStatus, NewEquipmentId);
             ClearForm();
-
         }
-
         // ────────────────
         // 삭제
         // ────────────────

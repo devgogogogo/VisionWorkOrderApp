@@ -9,7 +9,6 @@ namespace VisionWorkOrderApp.Models
 {
     public class WorkOrder
     {
-
         public int Id { get; private set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
