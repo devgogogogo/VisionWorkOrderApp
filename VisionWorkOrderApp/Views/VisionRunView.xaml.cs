@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VisionWorkOrderApp.ViewModels;
 
 namespace VisionWorkOrderApp.Views
 {
@@ -23,6 +24,18 @@ namespace VisionWorkOrderApp.Views
         public VisionRunView()
         {
             InitializeComponent();
+            this.DataContext = new InspectionSessionViewModel();    
         }
     }
 }
+
+/*
+ *  왜 하는 건가요?
+```
+DataContext 연결 안 하면
+→ {Binding WorkOrders}, {Binding OkCount} 가
+   어디서 데이터를 가져올지 몰라서 화면에 아무것도 안 뜸!
+
+DataContext = InspectionSessionViewModel 연결하면
+→ 모든 {Binding ...} 이 InspectionSessionViewModel 을 바라봄
+ */

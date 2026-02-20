@@ -84,8 +84,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="Commands\BaseViewModel.cs" />
     <Compile Include="ViewModels\EquipmentViewModel.cs" />
+    <Compile Include="ViewModels\InspectionSessionViewModel.cs" />
     <Compile Include="ViewModels\WorkOrderViewModel.cs" />
     <Compile Include="Views\EquipmentView.xaml.cs">
       <DependentUpon>EquipmentView.xaml</DependentUpon>

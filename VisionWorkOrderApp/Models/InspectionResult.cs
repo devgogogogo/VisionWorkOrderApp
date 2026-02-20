@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VisionWorkOrderApp.Models
 {
-    class InspectionResult
+    public class InspectionResult
     {
         public int Id { get; set; }
         public int SessionId { get; set; }

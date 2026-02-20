@@ -6,10 +6,48 @@
              xmlns:local="clr-namespace:VisionWorkOrderApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="(비전검사 화면)"
-                   FontSize="18"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 작업지시 선택 -->
+        <StackPanel Background="Aqua" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="작업지시 선택"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding WorkOrders}"
+                      SelectedItem="{Binding SelectedWorkOrder}"
+                      DisplayMemberPath="ProductName"
+                      Width="200"
+                      Height="30"/>
+        </StackPanel>
+        <!-- OK / NG 카운트 -->
+        <StackPanel Background="Beige" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Border Background="Green" Padding="20,10" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="OK" Foreground="White" FontSize="14" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding OkCount}" Foreground="White" FontSize="24" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+            <Border Background="Red" Padding="20,10">
+                <StackPanel>
+                    <TextBlock Text="NG" Foreground="White" FontSize="14" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding NgCount}" Foreground="White" FontSize="24" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <!-- 검사 결과 목록 -->
+        <DataGrid Background="CadetBlue" 
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="시간" Binding="{Binding TimeStamp}" Width="150"/>
+                <DataGridTextColumn Header="결과" Binding="{Binding Label}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

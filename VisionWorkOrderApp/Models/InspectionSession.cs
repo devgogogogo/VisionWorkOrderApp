@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace VisionWorkOrderApp.Models
 {
     //검사 세션
-     class InspectionSession
+    public class InspectionSession
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public int WorkOrderId { get; set; }
         public int EquipmentId { get; set; }
         public DateTime StartTime { get; set; }
