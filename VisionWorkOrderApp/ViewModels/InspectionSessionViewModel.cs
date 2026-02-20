@@ -13,6 +13,9 @@ namespace VisionWorkOrderApp.ViewModels
         // 작업지시 목록 (comboBox용)
         public ObservableCollection<WorkOrder> WorkOrders { get; set; }
 
+        // 검사 결과 목록
+        public ObservableCollection<InspectionResult> Results { get; set; }
+
         //선택된 작업 지시
         private WorkOrder _selectedWorkOrder;
 
@@ -37,8 +40,6 @@ namespace VisionWorkOrderApp.ViewModels
             set { ngCount = value; OnPropertyChanged(); } 
         }
 
-        // 검사 결과 목록
-        public ObservableCollection<InspectionResult> Results { get; set; }
         //생성자
         public InspectionSessionViewModel()
         {
