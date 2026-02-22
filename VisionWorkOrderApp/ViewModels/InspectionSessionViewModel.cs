@@ -33,6 +33,7 @@ namespace VisionWorkOrderApp.ViewModels
             get { return _okCount; }
             set { _okCount = value; OnPropertyChanged();}  
         }
+        // NG 카운트
         private int ngCount;
         public int NgCount
         {

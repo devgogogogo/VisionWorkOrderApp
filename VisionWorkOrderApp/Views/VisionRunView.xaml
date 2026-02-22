@@ -27,7 +27,7 @@
         <!-- OK / NG 카운트 -->
         <StackPanel Background="Beige" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
             <Border Background="Green" Padding="20,10" Margin="0,0,10,0">
-                <StackPanel>
+                <StackPanel >
                     <TextBlock Text="OK" Foreground="White" FontSize="14" HorizontalAlignment="Center"/>
                     <TextBlock Text="{Binding OkCount}" Foreground="White" FontSize="24" HorizontalAlignment="Center"/>
                 </StackPanel>
@@ -38,6 +38,9 @@
                     <TextBlock Text="{Binding NgCount}" Foreground="White" FontSize="24" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
+            <!-- 버튼 추가 -->
+             <Button Content="OK 입력" Width="80" Height="40" Margin="10,0,5,0" Command="{Binding OkCommand}"/>
+             <Button Content="NG 입력" Width="80" Height="40" Margin="5,0,0,0" Command="{Binding NgCommand}"/>
         </StackPanel>
         <!-- 검사 결과 목록 -->
         <DataGrid Background="CadetBlue" 
@@ -51,3 +54,32 @@
         </DataGrid>
     </Grid>
 </UserControl>
+
+<!--{Binding OkCount} 의 경우-->
+<!--ItemsSource 없음
+→ DataContext 를 바로 바라봄
+→ InspectionSessionViewModel.OkCount 표시!-->
+    
+    
+<!--DisplayMemberPath="ProductName" 의 경우-->
+<!--ItemsSource="{Binding WorkOrders}" 가 있음
+→ DataContext 가 아니라 ItemsSource 안 객체를 바라봄
+→ WorkOrder.ProductName 표시!-->
+    
+    
+<!--만약 InspectionSessionViewModel 에 ProductName 이 있다면?-->
+<!--ItemsSource="{Binding WorkOrders}" 가 있는 이상
+→ 무조건 WorkOrder.ProductName 을 봐요!
+→ InspectionSessionViewModel.ProductName 은 무시!-->
+    
+<!--결론 (바라보는 기준)-->
+<!--ItemsSource 없음  →  DataContext 기준
+ItemsSource 있음  →  ItemsSource 안 객체 기준-->
+
+<!--// ItemsSource → 리스트 타입
+public ObservableCollection<WorkOrder> WorkOrders { get; set; }
+
+// SelectedItem → 단일 객체 타입
+public WorkOrder SelectedWorkOrder { get; set; }
+//     ↑
+//  리스트 안에 있는 객체 타입과 같아야 해요!-->
