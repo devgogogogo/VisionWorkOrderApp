@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VisionWorkOrderApp.Models;
 using VisionWorkOrderApp.Views;
 namespace VisionWorkOrderApp
 {
@@ -27,7 +28,7 @@ namespace VisionWorkOrderApp
             PageTile.Text = "작업지시 관리";
         }
 
-        private void Button_ClicK(object sender, RoutedEventArgs e)
+        private void BtnWorkOrder_ClicK(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new WorkOrderView();
             PageTile.Text = "작업지시 관리";
@@ -35,13 +36,13 @@ namespace VisionWorkOrderApp
 
         private void BtnVisionRun_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new VisionRunView();
+            MainContent.Content = new InspectionSessionView();
             PageTile.Text = "비젼 검사 실행";
         }
 
         private void BtnResultHistory_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new ResultHistoryView();
+            MainContent.Content = new InspectionResultView();
             PageTile.Text = "검사 결과 이력";
         }
 

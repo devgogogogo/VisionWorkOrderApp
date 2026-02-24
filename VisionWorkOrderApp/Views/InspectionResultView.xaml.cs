@@ -12,17 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VisionWorkOrderApp.ViewModels;
 
 namespace VisionWorkOrderApp.Views
 {
     /// <summary>
     /// ResultHistoryView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ResultHistoryView : UserControl
+    public partial class InspectionResultView : UserControl
     {
-        public ResultHistoryView()
+        public InspectionResultView()
         {
             InitializeComponent();
+            this.DataContext = new InspectionResultViewModel();
         }
     }
 }

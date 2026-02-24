@@ -86,16 +86,17 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\BaseViewModel.cs" />
     <Compile Include="ViewModels\EquipmentViewModel.cs" />
+    <Compile Include="ViewModels\InspectionResultViewModel.cs" />
     <Compile Include="ViewModels\InspectionSessionViewModel.cs" />
     <Compile Include="ViewModels\WorkOrderViewModel.cs" />
     <Compile Include="Views\EquipmentView.xaml.cs">
       <DependentUpon>EquipmentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResultHistoryView.xaml.cs">
-      <DependentUpon>ResultHistoryView.xaml</DependentUpon>
+    <Compile Include="Views\InspectionResultView.xaml.cs">
+      <DependentUpon>InspectionResultView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VisionRunView.xaml.cs">
-      <DependentUpon>VisionRunView.xaml</DependentUpon>
+    <Compile Include="Views\InspectionSessionView.xaml.cs">
+      <DependentUpon>InspectionSessionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WorkOrderView.xaml.cs">
       <DependentUpon>WorkOrderView.xaml</DependentUpon>
@@ -116,11 +117,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ResultHistoryView.xaml">
+    <Page Include="Views\InspectionResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\VisionRunView.xaml">
+    <Page Include="Views\InspectionSessionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

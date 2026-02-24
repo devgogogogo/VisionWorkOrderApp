@@ -19,9 +19,9 @@ namespace VisionWorkOrderApp.Views
     /// <summary>
     /// VisionRunView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class VisionRunView : UserControl
+    public partial class InspectionSessionView : UserControl
     {
-        public VisionRunView()
+        public InspectionSessionView()
         {
             InitializeComponent();
             this.DataContext = new InspectionSessionViewModel();    

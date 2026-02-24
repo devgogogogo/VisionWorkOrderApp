@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VisionWorkOrderApp.Views.VisionRunView"
+﻿<UserControl x:Class="VisionWorkOrderApp.Views.InspectionSessionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -45,6 +45,7 @@
         <!-- 검사 결과 목록 -->
         <DataGrid Background="CadetBlue" 
                   Grid.Row="2"
+                  ItemsSource="{Binding Results}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
