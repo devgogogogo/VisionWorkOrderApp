@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace VisionWorkOrderApp.Models
 {
     public class WorkOrder
     {
-        public int Id { get; private set; }
+        [Key]
+        public int Id { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
         public string Status { get; set; }
