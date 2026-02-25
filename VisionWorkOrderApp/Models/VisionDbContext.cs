@@ -9,7 +9,7 @@ namespace VisionWorkOrderApp.Models
 {
     //DbContext  →  JPA 의 EntityManager 랑 같은 역할
     //DbSet      →  JPA 의 Repository 랑 같은 역할
-    public class VisionDbContext :DbContext
+    public class VisionDbContext : DbContext
     {
         public VisionDbContext()
             :base("name=VisionMES")

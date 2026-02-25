@@ -17,7 +17,10 @@ namespace VisionWorkOrderApp.ViewModels
 {
     public class WorkOrderViewModel : BaseViewModel
     {
+        //DB 전역 선언
+        private VisionDbContext _db = new VisionDbContext();
         public ObservableCollection<WorkOrder> WorkOrders { get; set; }
+        public ObservableCollection<Equipment> Equipments { get; set; }
 
         private WorkOrder _selectedWorkOrder;
         public WorkOrder SelectedWorkOrder
@@ -38,14 +41,9 @@ namespace VisionWorkOrderApp.ViewModels
                 }
             }
         }
-        //────────────────
-        // 설비 목록 (ComboBox용) ComboBox에 표시할 설비 목록
-        // ────────────────
-        public ObservableCollection<Equipment> Equipments { get; set; }
         // ────────────────
         // 입력 폼속성 (상품이름)
         // ────────────────
-
         private string _newProductName;
         public string NewProductName
         {
@@ -119,21 +117,23 @@ namespace VisionWorkOrderApp.ViewModels
         // 생성자 (초기화)
         public WorkOrderViewModel()
         {
-            WorkOrders = new ObservableCollection<WorkOrder>()
+            try
             {
-                 new WorkOrder(1,"스마트폰 케이스", 100, "대기",1),
-                 new WorkOrder(2,"노트북 스탠드", 200, "진행중",2),
-                 new WorkOrder(3,"무선 마우스", 150, "완료",1)
-            };
-            // 설비 목록 초기화
+                WorkOrders = new ObservableCollection<WorkOrder>(_db.WorkOrders.ToList());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("DB 오류: " + ex.Message);
+                WorkOrders = new ObservableCollection<WorkOrder>();
+            }
+
             Equipments = new ObservableCollection<Equipment>()
             {
-                new Equipment(1,"검사기 A호"),
-                new Equipment(2,"검사기 B호"),
-                new Equipment(3,"검사기 C호"),
+                new Equipment(1, "검사기 A호"),
+                new Equipment(2, "검사기 B호"),
+                new Equipment(3, "검사기 C호"),
             };
 
-            // Command 초기화
             AddCommand = new RelayCommand(AddWorkOrder);
             EditCommand = new RelayCommand(EditWorkOrder);
             DeleteCommand = new RelayCommand(DeleteWorkOrder);
@@ -165,8 +165,24 @@ namespace VisionWorkOrderApp.ViewModels
                 MessageBox.Show("설비를 선택하세요!");
                 return;
             }
-            int newId = WorkOrders.Count + 1;
-            WorkOrders.Add(new WorkOrder(newId, NewProductName, NewQuantity, NewStatus, NewEquipmentId));
+            WorkOrder newWorkOrder = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentId);
+            //입력 폼에서 받은 값으로 WorkOrder 객체를 만드는 것
+            //Id 는 0 → DB 가 자동으로 채워줌
+
+            /*
+             * _db.WorkOrders
+             → MSSQL 의 WorkOrders 테이블
+             → DB 안에 있는 테이블
+             */
+
+            /*
+             * WorkOrders
+            → 화면에 표시되는 목록
+            → ObservableCollection (메모리)
+             */
+            _db.WorkOrders.Add(newWorkOrder); //EF 에게 "이 객체를 DB 에 추가할 거야" 라고 알려주는 것
+            _db.SaveChanges(); //실제로 DB 에 INSERT INTO WorkOrders (...) VALUES (...) 실행
+            WorkOrders.Add(newWorkOrder);
             ClearForm();
         }
         // ────────────────
@@ -180,7 +196,8 @@ namespace VisionWorkOrderApp.ViewModels
                 return;
             }
             int index = WorkOrders.IndexOf(SelectedWorkOrder);
-            WorkOrders[index] = new WorkOrder(SelectedWorkOrder.Id, NewProductName, NewQuantity, NewStatus, NewEquipmentId);
+            WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentId);
+            _db.SaveChanges();
             ClearForm();
         }
         // ────────────────
@@ -190,15 +207,17 @@ namespace VisionWorkOrderApp.ViewModels
         {
             if (SelectedWorkOrder == null)
             {
-                System.Windows.MessageBox.Show("삭제할 항목을 선택하세요!");
+                MessageBox.Show("삭제할 항목을 선택하세요!");
                 return;
             }
-            System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show($"{SelectedWorkOrder.ProductName}을(를) 삭제하시겠습니까?", "삭제 확인", System.Windows.MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show($"{SelectedWorkOrder.ProductName}을(를) 삭제하시겠습니까?", "삭제 확인", MessageBoxButton.YesNo);
 
-            if (result == System.Windows.MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
+                _db.WorkOrders.Remove(SelectedWorkOrder);
+                _db.SaveChanges();
                 WorkOrders.Remove(SelectedWorkOrder);
-                System.Windows.MessageBox.Show("삭제되었습니다!");
+                MessageBox.Show("삭제되었습니다!");
             }
         }
         // ────────────────

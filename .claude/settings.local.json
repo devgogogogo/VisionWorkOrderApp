@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(\"C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/MSBuild.exe\" \"C:/Users/imleo/source/repos/VisionWorkOrderApp/VisionWorkOrderApp/VisionWorkOrderApp.csproj\" /t:Build /p:Configuration=Debug /v:minimal)",
+      "Bash(cmd /c:*)",
+      "Bash(echo:*)",
+      "Bash(powershell -Command \"& ''C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe'' ''C:\\\\Users\\\\imleo\\\\source\\\\repos\\\\VisionWorkOrderApp\\\\VisionWorkOrderApp\\\\VisionWorkOrderApp.csproj'' /t:Build /p:Configuration=Debug /v:minimal\")",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell.exe -NoProfile -NonInteractive -Command \"Get-Service | Where-Object { $_Name -like ''*SQL*'' } | Format-Table Name, DisplayName, Status -AutoSize\")",
+      "Bash(sc query:*)",
+      "Bash(findstr:*)",
+      "Bash(sc queryex:*)",
+      "Bash(wmic service where \"name like ''%SQL%''\" get Name,State,StartMode)",
+      "Bash(wmic service where \"name=''MSSQL$SQLEXPRESS''\" get Name,State,StartMode)",
+      "Bash(wmic service:*)",
+      "Bash(powershell.exe -NoProfile -Command \":*)"
+    ]
+  }
+}

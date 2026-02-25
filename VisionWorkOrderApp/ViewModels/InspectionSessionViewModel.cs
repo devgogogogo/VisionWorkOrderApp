@@ -50,9 +50,9 @@ namespace VisionWorkOrderApp.ViewModels
 
             WorkOrders = new ObservableCollection<WorkOrder>()
             {
-                new WorkOrder(1,"스마트폰 케이스",100,"대기",1),
-                new WorkOrder(1,"노트북 스탠드",200,"진행중",2),
-                new WorkOrder(1,"스마트폰 케이스",300,"완료",1),
+                new WorkOrder("스마트폰 케이스",100,"대기",1),
+                new WorkOrder("노트북 스탠드",200,"진행중",2),
+                new WorkOrder("스마트폰 케이스",300,"완료",1),
             };
             OkCommand = new RelayCommand(AddOk);
             NgCommand = new RelayCommand(AddNg);
