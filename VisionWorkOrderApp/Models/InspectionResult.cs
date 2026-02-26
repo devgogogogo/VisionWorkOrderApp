@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace VisionWorkOrderApp.Models
 {
     public class InspectionResult
     {
+        [Key]
         public int Id { get; set; }
         public int SessionId { get; set; }
         public DateTime TimeStamp { get; set; }
@@ -16,9 +18,10 @@ namespace VisionWorkOrderApp.Models
         public double? confidence { get; set; }
         public string ImagePath { get; set; }
 
-        public InspectionResult(int id, int sessionId, string label)
+        public InspectionResult() { }  // 기본 생성자 추가 해줘야함
+
+        public InspectionResult(int sessionId, string label)
         {
-            Id = id;
             SessionId = sessionId;
             Label = label;
             TimeStamp = DateTime.Now;

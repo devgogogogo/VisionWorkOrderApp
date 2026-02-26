@@ -37,7 +37,7 @@ namespace VisionWorkOrderApp.ViewModels
                     NewProductName = value.ProductName;
                     NewQuantity = value.Quantity;
                     NewStatus = value.Status;
-                    NewEquipmentId = value.EquipmentId;
+                    NewEquipmentName = value.EquipmentName;
                 }
             }
         }
@@ -83,24 +83,22 @@ namespace VisionWorkOrderApp.ViewModels
         // ────────────────
         // 입력 ComboBox (새로운 장비번호)
         // ────────────────
-        private int _newEquipmentId;
-        public int NewEquipmentId
+        private string _newEquipmentName;
+        public string NewEquipmentName
         {
-            get { return _newEquipmentId; }
-            set { _newEquipmentId = value; OnPropertyChanged(); }
+            get { return _newEquipmentName; }
+            set { _newEquipmentName = value; OnPropertyChanged(); }
         }
 
         private Equipment _selectedEquipment;
         public Equipment SelectedEquipment
         {
             get { return _selectedEquipment; }
-            set
-            {
-                _selectedEquipment = value; OnPropertyChanged();
+            set {_selectedEquipment = value; OnPropertyChanged();
                 // ID 자동 설정 
                 if (value != null)
                 {
-                    NewEquipmentId = value.Id;
+                    NewEquipmentName = value.Name;
                 }
             }
         }
@@ -165,7 +163,7 @@ namespace VisionWorkOrderApp.ViewModels
                 MessageBox.Show("설비를 선택하세요!");
                 return;
             }
-            WorkOrder newWorkOrder = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentId);
+            WorkOrder newWorkOrder = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
             //입력 폼에서 받은 값으로 WorkOrder 객체를 만드는 것
             //Id 는 0 → DB 가 자동으로 채워줌
 
@@ -196,7 +194,7 @@ namespace VisionWorkOrderApp.ViewModels
                 return;
             }
             int index = WorkOrders.IndexOf(SelectedWorkOrder);
-            WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentId);
+            WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
             _db.SaveChanges();
             ClearForm();
         }
@@ -228,7 +226,7 @@ namespace VisionWorkOrderApp.ViewModels
             NewProductName = "";
             NewQuantity = 0;
             NewStatus = null;
-            NewEquipmentId = 0;
+            NewEquipmentName = "";
             SelectedWorkOrder = null;
 
         }

@@ -36,8 +36,8 @@
                 <DataGridTextColumn Header="상태" 
                           Binding="{Binding Status}" 
                                     Width="100"/>
-                <DataGridTextColumn Header="설비ID" 
-                                    Binding="{Binding EquipmentId}" 
+                <DataGridTextColumn Header="설비" 
+                                    Binding="{Binding EquipmentName}" 
                                     Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -75,13 +75,14 @@
                     <TextBlock Text="상태"
                            FontWeight="SemiBold"/>
                     <ComboBox SelectedValue="{Binding NewStatus}"
+                              SelectedValuePath="Content"
                           Height="25">
                         <ComboBoxItem Content="대기"/>
                         <ComboBoxItem Content="진행중"/>
                         <ComboBoxItem Content="완료"/>
                     </ComboBox>
                     <!--설비 ID-->
-                    <TextBlock Text="설비ID"
+                    <TextBlock Text="설비"
                            FontWeight="SemiBold"/>
                     <ComboBox ItemsSource="{Binding Equipments}"
                               SelectedItem="{Binding SelectedEquipment}"

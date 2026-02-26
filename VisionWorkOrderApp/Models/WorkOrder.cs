@@ -15,16 +15,16 @@ namespace VisionWorkOrderApp.Models
         public string ProductName { get; set; }
         public int Quantity { get; set; }
         public string Status { get; set; }
-        public int EquipmentId { get; set; }
+        public string EquipmentName { get; set; }
 
         //빈생성자 추가
         public WorkOrder() { }
-        public WorkOrder (string productName, int quantity, string status, int equipmentId)
+        public WorkOrder (string productName, int quantity, string status, string equipmentName)
         {
             ProductName = productName;
             Quantity = quantity;
             Status = status;
-            EquipmentId = equipmentId;
+            EquipmentName = equipmentName;
         }
     }
 }

@@ -45,11 +45,5 @@ namespace VisionWorkOrderApp
             MainContent.Content = new InspectionResultView();
             PageTile.Text = "검사 결과 이력";
         }
-
-        private void BtnEquipment_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new EquipmentView();
-            PageTile.Text = "설비관리";
-        }
     }
 }

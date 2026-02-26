@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,11 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using VisionWorkOrderApp.Models;
+using VisionWorkOrderApp.Commands;
 
 namespace VisionWorkOrderApp.ViewModels
 {
     public class InspectionSessionViewModel : BaseViewModel
     {
+        // DB 전역 선언
+        private VisionDbContext _db = new VisionDbContext();
+
         // 작업지시 목록 (comboBox용)
         public ObservableCollection<WorkOrder> WorkOrders { get; set; }
 
@@ -47,13 +51,8 @@ namespace VisionWorkOrderApp.ViewModels
         //생성자
         public InspectionSessionViewModel()
         {
-
-            WorkOrders = new ObservableCollection<WorkOrder>()
-            {
-                new WorkOrder("스마트폰 케이스",100,"대기",1),
-                new WorkOrder("노트북 스탠드",200,"진행중",2),
-                new WorkOrder("스마트폰 케이스",300,"완료",1),
-            };
+            // DB 에서 작업지시 가져오기
+            WorkOrders = new ObservableCollection<WorkOrder>(_db.WorkOrders.ToList());
             OkCommand = new RelayCommand(AddOk);
             NgCommand = new RelayCommand(AddNg);
 
@@ -62,12 +61,12 @@ namespace VisionWorkOrderApp.ViewModels
         private void AddOk()
         {
             OkCount++;
-            Results.Add(new InspectionResult(Results.Count + 1, 1, "Ok"));
+            Results.Add(new InspectionResult(1, "Ok"));
         }
         public void AddNg()
         {
             NgCount++;
-            Results.Add(new InspectionResult(Results.Count + 1, 1, "NG"));
+            Results.Add(new InspectionResult(1, "NG"));
         }
     }
 }

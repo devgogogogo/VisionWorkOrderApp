@@ -17,5 +17,6 @@ namespace VisionWorkOrderApp.Models
         }
         public DbSet<WorkOrder> WorkOrders { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<InspectionResult> InspectionResults { get; set; }
     }
 }

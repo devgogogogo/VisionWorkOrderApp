@@ -96,6 +96,18 @@
     <Compile Include="Migrations\202602240516563_InitialCreate.Designer.cs">
       <DependentUpon>202602240516563_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602261457231_AddInspectionResult.cs" />
+    <Compile Include="Migrations\202602261457231_AddInspectionResult.Designer.cs">
+      <DependentUpon>202602261457231_AddInspectionResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202602261501130_AddInspectionResult2.cs" />
+    <Compile Include="Migrations\202602261501130_AddInspectionResult2.Designer.cs">
+      <DependentUpon>202602261501130_AddInspectionResult2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202602261615556_ChangeEquipmentIdToName.cs" />
+    <Compile Include="Migrations\202602261615556_ChangeEquipmentIdToName.Designer.cs">
+      <DependentUpon>202602261615556_ChangeEquipmentIdToName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\VisionDbContext.cs" />
     <Compile Include="ViewModels\EquipmentViewModel.cs" />
@@ -163,6 +175,15 @@
     </Compile>
     <EmbeddedResource Include="Migrations\202602240516563_InitialCreate.resx">
       <DependentUpon>202602240516563_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602261457231_AddInspectionResult.resx">
+      <DependentUpon>202602261457231_AddInspectionResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602261501130_AddInspectionResult2.resx">
+      <DependentUpon>202602261501130_AddInspectionResult2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602261615556_ChangeEquipmentIdToName.resx">
+      <DependentUpon>202602261615556_ChangeEquipmentIdToName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
