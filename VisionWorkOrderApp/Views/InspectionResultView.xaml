@@ -7,13 +7,31 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White" Margin="10">
-        <DataGrid ItemsSource="{Binding Results}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- 필터 영역 -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="결과필터" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding FilterOptions}"
+                      SelectedItem="{Binding SelectedFilter}"
+                      Width="100"
+                      Height="30"/>
+        </StackPanel>
+
+        <!-- 결과 목록 -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding FilteredResults}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50"/>
                 <DataGridTextColumn Header="시간" Binding="{Binding TimeStamp}" Width="150"/>
+                <DataGridTextColumn Header="제품명" Binding="{Binding ProductName}" Width="120"/>
                 <DataGridTextColumn Header="결과" Binding="{Binding Label}" Width="80"/>
+                <DataGridTextColumn Header="신뢰도" Binding="{Binding Confidence}" Width="80"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -5,9 +5,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using VisionWorkOrderApp.Models;
 using VisionWorkOrderApp.Commands;
+using VisionWorkOrderApp.Models;
+using OpenCvSharp;
 
 namespace VisionWorkOrderApp.ViewModels
 {
@@ -48,25 +50,83 @@ namespace VisionWorkOrderApp.ViewModels
         }
         public ICommand OkCommand { get; set; }
         public ICommand NgCommand { get; set; }
-        //생성자
+
+        //생성자  →  화면 열릴 때 필요한 것들 미리 준비하는 곳!
         public InspectionSessionViewModel()
         {
-            // DB 에서 작업지시 가져오기
+            // 1. 데이터 초기화 (DB 에서 가져오기)
             WorkOrders = new ObservableCollection<WorkOrder>(_db.WorkOrders.ToList());
+
+            // 2.커맨드 초기화(버튼 연결)
             OkCommand = new RelayCommand(AddOk);
             NgCommand = new RelayCommand(AddNg);
 
+            // 3. 빈 컬렉션 초기화
             Results = new ObservableCollection<InspectionResult>();
+            //테스트 카메라
+            TestCamera();
         }
+
+        //카메라 테스트 메서드
+        private void TestCamera()
+        {
+            // 카메라 열기 (0 == 기본 카메라)
+            VideoCapture capture = new VideoCapture(0);
+
+            if (!capture.IsOpened())
+            {
+                MessageBox.Show("카메라를 찾을 수 없습니다.");
+                return;
+            }
+            MessageBox.Show("카메라 연결 성공!");
+            capture.Release();
+        }
+
         private void AddOk()
         {
+            //작업지시 선택 여부 확인
+            if (SelectedWorkOrder == null)
+            {
+                MessageBox.Show("작업지시를 선택해주세요!");
+                return;
+            }
             OkCount++;
-            Results.Add(new InspectionResult(1, "Ok"));
+            string productName;
+            if (SelectedWorkOrder == null)
+            {
+                productName = "미선택";
+            }else
+            {
+                productName = SelectedWorkOrder.ProductName;
+            }
+            InspectionResult result = new InspectionResult("OK", productName);
+            _db.InspectionResults.Add(result);
+            _db.SaveChanges();
+            Results.Add(result);
         }
         public void AddNg()
         {
+            // 작업지시 선택 여부 확인
+            if (SelectedWorkOrder == null)
+            {
+                MessageBox.Show("작업지시를 선택해주세요!");
+                return;
+            }
             NgCount++;
-            Results.Add(new InspectionResult(1, "NG"));
+            string productName;
+            if (SelectedWorkOrder == null)
+            {
+                productName = "미선택";
+            }
+            else
+            {
+                productName = SelectedWorkOrder.ProductName;
+            }
+
+            InspectionResult result = new InspectionResult("NG", productName);
+            _db.InspectionResults.Add(result);
+            _db.SaveChanges();
+            Results.Add(result);
         }
     }
 }
