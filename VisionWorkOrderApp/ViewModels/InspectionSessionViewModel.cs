@@ -20,6 +20,7 @@ namespace VisionWorkOrderApp.ViewModels
 {
     public class InspectionSessionViewModel : BaseViewModel
     {
+        private DateTime _lastSaveTime = DateTime.MinValue;
         // 프레임
         Mat frame = new Mat();
         // DB 전역 선언
@@ -163,10 +164,35 @@ namespace VisionWorkOrderApp.ViewModels
                 resultText = "NG";
                 color = Scalar.Red;
             }
+            // 6. 자동 DB 저장 (작업지시 선택된 경우만)
+            if (SelectedWorkOrder != null)
+            {
+                AutoSaveResult(resultText);
+            }
 
-            // 6. 화면에 결과 텍스트 표시
+            // 7. 화면에 결과 텍스트 표시
             Cv2.PutText(flipped, resultText, new OpenCvSharp.Point(30, 60), HersheyFonts.HersheySimplex, 2, color, 3);
             BitmapSource = flipped.ToBitmapSource();
+        }
+
+        private void AutoSaveResult(string label)
+        {
+            //1초에 1번만 저장
+            if ((DateTime.Now - _lastSaveTime).TotalSeconds < 1) return;
+            _lastSaveTime = DateTime.Now;
+            if (label == "OK")
+            {
+                OkCount++;
+            }
+            else
+            {
+                NgCount++;
+            }
+            string productName = SelectedWorkOrder.ProductName;
+            InspectionResult result = new InspectionResult(label, productName);
+            _db.InspectionResults.Add(result);
+            _db.SaveChanges(); //더티채킹과 비슷 SaveChanges()을 직접 호출해야 저장됨
+            Results.Add(result);
         }
 
         private void AddOk()
