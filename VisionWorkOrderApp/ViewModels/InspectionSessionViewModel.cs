@@ -1,22 +1,42 @@
 ﻿
+using OpenCvSharp;
+using OpenCvSharp.WpfExtensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using VisionWorkOrderApp.Commands;
 using VisionWorkOrderApp.Models;
-using OpenCvSharp;
 
 namespace VisionWorkOrderApp.ViewModels
 {
     public class InspectionSessionViewModel : BaseViewModel
     {
+        // 프레임
+        Mat frame = new Mat();
         // DB 전역 선언
         private VisionDbContext _db = new VisionDbContext();
+
+        //카메라 관련
+        private VideoCapture videoCapture;
+        private Thread thread;
+        private bool _isRunning;
+
+        //카메라 화면 (XAML 의 Image 와 바인딩)
+        private BitmapSource bitmapSource;
+        public BitmapSource BitmapSource
+        {
+            get { return bitmapSource; }
+            set { bitmapSource = value; OnPropertyChanged(); }
+        }
 
         // 작업지시 목록 (comboBox용)
         public ObservableCollection<WorkOrder> WorkOrders { get; set; }
@@ -64,22 +84,58 @@ namespace VisionWorkOrderApp.ViewModels
             // 3. 빈 컬렉션 초기화
             Results = new ObservableCollection<InspectionResult>();
             //테스트 카메라
-            TestCamera();
+            StartCamera();
         }
 
-        //카메라 테스트 메서드
-        private void TestCamera()
+        // 카메라 시작 메서드
+        private void StartCamera()
         {
-            // 카메라 열기 (0 == 기본 카메라)
-            VideoCapture capture = new VideoCapture(0);
+            videoCapture = new VideoCapture(0);
 
-            if (!capture.IsOpened())
+            if (!videoCapture.IsOpened())
             {
-                MessageBox.Show("카메라를 찾을 수 없습니다.");
+                MessageBox.Show("카메라를 찾을 수 없습니다!");
                 return;
             }
-            MessageBox.Show("카메라 연결 성공!");
-            capture.Release();
+
+            // 별도 스레드에서 카메라 실행 (UI 가 멈추지 않도록!)
+            _isRunning = true;
+            thread = new Thread(CameraLoop);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        // 카메라 루프 (계속 프레임 읽기)
+        private void CameraLoop()
+        {
+            while (_isRunning)
+            {
+                // 카메라에서 프레임 1장 읽어서 frame 에 저장
+                videoCapture.Read(frame);
+
+                // 프레임이 비어있으면 다음 루프로 건너뜀
+                // (카메라 연결 불안정할 때 대비)
+                if (frame.Empty()) continue;
+
+                // UI 스레드에서 화면 업데이트
+                Application.Current.Dispatcher.Invoke(UpdateFrame);
+                // Dispatcher.Invoke → UI 스레드에서 실행
+                // ToBitmapSource() → Mat 을 WPF Image 로 변환
+                // BitmapSource 바뀌면 → 화면 자동 업데이트!
+                Thread.Sleep(33); // 33ms 마다 갱신 = 약 30fps
+            }
+        }
+        private void UpdateFrame()
+        {
+            Mat flipped = new Mat();
+            Cv2.Flip(frame, flipped, FlipMode.Y);
+            /*
+             * → 첫번째 파라미터 : 원본 프레임
+               → 두번째 파라미터 : 결과 저장할 Mat
+               → 세번째 파라미터 : FlipMode
+                  FlipMode.X → 상하 대칭
+                  FlipMode.Y → 좌우 대칭 ✅
+             */
+            BitmapSource = flipped.ToBitmapSource();
         }
 
         private void AddOk()
@@ -91,14 +147,7 @@ namespace VisionWorkOrderApp.ViewModels
                 return;
             }
             OkCount++;
-            string productName;
-            if (SelectedWorkOrder == null)
-            {
-                productName = "미선택";
-            }else
-            {
-                productName = SelectedWorkOrder.ProductName;
-            }
+            string productName = SelectedWorkOrder.ProductName;
             InspectionResult result = new InspectionResult("OK", productName);
             _db.InspectionResults.Add(result);
             _db.SaveChanges();
@@ -113,16 +162,7 @@ namespace VisionWorkOrderApp.ViewModels
                 return;
             }
             NgCount++;
-            string productName;
-            if (SelectedWorkOrder == null)
-            {
-                productName = "미선택";
-            }
-            else
-            {
-                productName = SelectedWorkOrder.ProductName;
-            }
-
+            string productName = SelectedWorkOrder.ProductName;
             InspectionResult result = new InspectionResult("NG", productName);
             _db.InspectionResults.Add(result);
             _db.SaveChanges();
