@@ -126,15 +126,46 @@ namespace VisionWorkOrderApp.ViewModels
         }
         private void UpdateFrame()
         {
+            // 1. 카메라에서 프레임 읽기 + 좌우대칭
             Mat flipped = new Mat();
-            Cv2.Flip(frame, flipped, FlipMode.Y);
-            /*
-             * → 첫번째 파라미터 : 원본 프레임
-               → 두번째 파라미터 : 결과 저장할 Mat
-               → 세번째 파라미터 : FlipMode
-                  FlipMode.X → 상하 대칭
-                  FlipMode.Y → 좌우 대칭 ✅
-             */
+            Cv2.Flip(frame, flipped, FlipMode.Y); // 첫번째 파라미터 : 원본 프레임,두번째 파라미터 : 결과 저장할 Mat,세번째 파라미터 : FlipMode
+                                                  // FlipMode.X → 상하 대칭
+                                                  // FlipMode.Y → 좌우 대칭
+
+            // 2. HSV 색상으로 변환 (빨간색 감지에 더 정확!) 
+            Mat hsv = new Mat();
+            Cv2.CvtColor(flipped, hsv, ColorConversionCodes.BGR2HSV);
+
+            // 3. 빨간색 영역 마스킹
+            // 빨간색은 HSV 에서 0~10 과 170~180 두 구간에 존재
+            Mat mask1 = new Mat();
+            Mat mask2 = new Mat();
+            Mat mask = new Mat();
+            Cv2.InRange(hsv, new Scalar(0, 100, 100), new Scalar(10, 255, 255), mask1);
+            Cv2.InRange(hsv, new Scalar(170, 100, 100), new Scalar(180, 255, 255), mask2);
+            Cv2.Add(mask1, mask2,mask);// 두 마스크 합치기
+
+            // 4. 빨간색 비율 계산
+            double totalPixels = flipped.Rows * flipped.Cols; // 전체 픽셀 수
+            double redPixels = Cv2.CountNonZero(mask); // 빨간색 픽셀 수 
+            double redRatio = redPixels / totalPixels; //빨간색 비율
+
+            // 5. 비율이 기준치 이상 → OK / 미만 → NG
+            string resultText;
+            Scalar color;
+
+            if (redRatio>0.05)
+            {
+                resultText = "Ok";
+                color = Scalar.Green;
+            }else
+            {
+                resultText = "NG";
+                color = Scalar.Red;
+            }
+
+            // 6. 화면에 결과 텍스트 표시
+            Cv2.PutText(flipped, resultText, new OpenCvSharp.Point(30, 60), HersheyFonts.HersheySimplex, 2, color, 3);
             BitmapSource = flipped.ToBitmapSource();
         }
 
@@ -170,3 +201,11 @@ namespace VisionWorkOrderApp.ViewModels
         }
     }
 }
+
+/*
+ * HSV 가 뭔가요?
+ * RGB  →  빨강, 초록, 파랑 조합
+   HSV  →  색상(Hue), 채도(Saturation), 밝기(Value)
+       → 빛의 밝기에 덜 영향받음
+       → 색상 감지에 더 정확!
+ */
