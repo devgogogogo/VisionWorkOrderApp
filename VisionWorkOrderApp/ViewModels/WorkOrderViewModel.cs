@@ -193,8 +193,16 @@ namespace VisionWorkOrderApp.ViewModels
                 MessageBox.Show("수정할 항목을 선택하세요!");
                 return;
             }
-            int index = WorkOrders.IndexOf(SelectedWorkOrder);
-            WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
+            //나중에 트러블슈팅
+            ////새 객체를 만들어서 교체했지만 화면만 바뀌고 DB에는 반영이 안됨
+            ////EF는 리스트에 있는 객체를 추적한다. -> 새로운 객체로 만들었서 그 index에 넣었지만 화면은 보임, 하지만! EF는 모르는 객체로 판단한다.->
+            //int index = WorkOrders.IndexOf(SelectedWorkOrder); //새로운 객체
+            //WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
+
+            SelectedWorkOrder.ProductName = NewProductName;
+            SelectedWorkOrder.Quantity = NewQuantity;
+            SelectedWorkOrder.Status = NewStatus;
+            SelectedWorkOrder.EquipmentName = NewEquipmentName;
             _db.SaveChanges();
             ClearForm();
         }
