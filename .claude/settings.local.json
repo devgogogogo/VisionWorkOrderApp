@@ -14,7 +14,8 @@
       "Bash(wmic service where \"name like ''%SQL%''\" get Name,State,StartMode)",
       "Bash(wmic service where \"name=''MSSQL$SQLEXPRESS''\" get Name,State,StartMode)",
       "Bash(wmic service:*)",
-      "Bash(powershell.exe -NoProfile -Command \":*)"
+      "Bash(powershell.exe -NoProfile -Command \":*)",
+      "Bash(git restore README.md)"
     ]
   }
 }
