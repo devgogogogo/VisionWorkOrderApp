@@ -56,6 +56,11 @@
 - ObservableCollection 으로 DB 변경사항 즉시 UI 반영
 - EF 변경 추적 활용으로 기존 객체 직접 수정 후 SaveChanges() 호출
 - ComboBox 바인딩으로 설비 선택 기능 구현
+  
+
+https://github.com/user-attachments/assets/2360637a-c69e-4a55-abae-a6a195177375
+
+
 
 ### 2. 비전 검사 실행
 - 실시간 카메라 영상 출력
