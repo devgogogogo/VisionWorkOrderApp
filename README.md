@@ -77,15 +77,57 @@
 
 ## 💡 트러블슈팅
 
-### EF 수정 버그
-- **문제** : 새 객체로 교체시 DB에 반영 안됨
-- **원인** : EF는 처음 가져온 객체만 추적, 새 객체는 모름
-- **해결** : 기존 객체를 직접 수정 후 SaveChanges() 호출
+### EF 변경 추적 미인식으로 수정 DB 미반영
+- **문제** : 수정 버튼 클릭 시 ObservableCollection의 화면 목록은 바뀌지만 DB에 반영되지 않음
+- **원인** : EF는 DbContext로 조회한 객체만 내부적으로 추적(Tracking) 상태로 관리함.
+  수정 시 새 WorkOrder 객체를 생성해 WorkOrders[index]에 교체하면
+  화면(ObservableCollection)에는 반영되지만,
+  새 객체는 DbContext가 모르는 Detached 상태이므로
+  SaveChanges() 호출 시 UPDATE 쿼리가 실행되지 않음
+  ```csharp
+  // 문제가 된 코드
+  int index = WorkOrders.IndexOf(SelectedWorkOrder);
+  WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
+  _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
 
-### UI 스레드 오류
-- **문제** : 카메라 스레드에서 UI 업데이트시 오류
-- **원인** : UI는 메인 스레드에서만 업데이트 가능
-- **해결** : Dispatcher.Invoke() 로 메인 스레드에서 실행
+### 카메라 스레드에서 UI 업데이트 시 InvalidOperationException
+- **문제** : 카메라 루프 스레드에서 BitmapSource 프로퍼티를 직접 업데이트하면
+  InvalidOperationException 발생
+- **원인** : WPF의 UI 요소는 UI 스레드(메인 스레드)에서만 접근 가능.
+  StartCamera()에서 별도 Thread를 생성해 CameraLoop()를 실행하는데,
+  이 스레드에서 BitmapSource = flipped.ToBitmapSource() 를 직접 호출하면
+  UI 스레드가 아닌 백그라운드 스레드에서 UI 프로퍼티에 접근하는 것이므로
+  WPF가 예외를 발생시킴
+  ```csharp
+  // 문제가 된 코드 (카메라 스레드에서 직접 UI 업데이트)
+  private void CameraLoop()
+  {
+      while (_isRunning)
+      {
+          videoCapture.Read(frame);
+          UpdateFrame(); // 백그라운드 스레드에서 직접 호출 → 예외 발생
+          Thread.Sleep(33);
+      }
+  }
+
+
+### 수정 후 DataGrid UI 미갱신
+- **문제** : 수정 버튼 클릭 시 DB는 저장되지만 DataGrid 행이 변경되지 않음
+- **원인** : WorkOrder 모델이 INotifyPropertyChanged를 구현하지 않아
+  SelectedWorkOrder.ProductName = NewProductName 으로 값을 바꿔도
+  DataGrid 바인딩이 변경을 감지하지 못함.
+  ObservableCollection은 항목 추가/삭제만 알리고,
+  항목 내부 프로퍼티 변경은 해당 객체가 직접 알려야 함
+- **시도** : 코드 중복을 줄이려고 WorkOrder에 BaseViewModel 상속 시도.
+  동작은 되지만 Models 폴더가 ViewModels 폴더를 참조하게 되어
+  Model → ViewModel 의존이 발생. MVVM 계층 구조가 무너지고
+  프로젝트 규모가 커질 경우 순환 참조 위험이 있어 적용하지 않음
+- **해결** : WorkOrder에 INotifyPropertyChanged 직접 구현 후
+  각 프로퍼티 setter에 OnPropertyChanged() 추가
+  → DataGrid 컬럼이 ProductName, Quantity 등에 바인딩되어 있으므로
+  값 변경 시 즉시 화면 갱신
+
+
 
 
 
