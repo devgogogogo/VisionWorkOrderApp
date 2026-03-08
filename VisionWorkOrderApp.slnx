@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/솔루션 항목/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="VisionWorkOrderApp/VisionWorkOrderApp.csproj" Id="2e76089b-1087-4e6b-996d-2efc67464c12" />
 </Solution>
