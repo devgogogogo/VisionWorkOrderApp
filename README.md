@@ -51,9 +51,11 @@
 ## ✅ 주요 기능
 
 ### 1. 작업지시 관리
-- 작업지시 CRUD (추가 / 수정 / 삭제)
-- Entity Framework DB 연동
-- 실시간 UI 업데이트 (ObservableCollection)
+- 작업지시 CRUD (추가 / 수정 / 삭제) 구현
+- Entity Framework 6 + MSSQL 연동으로 데이터 영구 저장
+- ObservableCollection 으로 DB 변경사항 즉시 UI 반영
+- EF 변경 추적 활용으로 기존 객체 직접 수정 후 SaveChanges() 호출
+- ComboBox 바인딩으로 설비 선택 기능 구현
 
 ### 2. 비전 검사 실행
 - 실시간 카메라 영상 출력
