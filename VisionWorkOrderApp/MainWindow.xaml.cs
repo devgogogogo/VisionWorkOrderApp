@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VisionWorkOrderApp.Models;
+using VisionWorkOrderApp.ViewModels;
 using VisionWorkOrderApp.Views;
 namespace VisionWorkOrderApp
 {
@@ -30,6 +31,12 @@ namespace VisionWorkOrderApp
 
         private void BtnWorkOrder_ClicK(object sender, RoutedEventArgs e)
         {
+            if (MainContent.Content is InspectionSessionView)
+            {
+                InspectionSessionView view = (InspectionSessionView)MainContent.Content;
+                InspectionSessionViewModel vm = (InspectionSessionViewModel)view.DataContext;
+                vm.StopCamera();
+            }
             MainContent.Content = new WorkOrderView();
             PageTile.Text = "작업지시 관리";
         }
@@ -42,6 +49,12 @@ namespace VisionWorkOrderApp
 
         private void BtnResultHistory_Click(object sender, RoutedEventArgs e)
         {
+            if (MainContent.Content is InspectionSessionView)
+            {
+                InspectionSessionView view = (InspectionSessionView)MainContent.Content;
+                InspectionSessionViewModel vm = (InspectionSessionViewModel)view.DataContext;
+                vm.StopCamera();
+            }
             MainContent.Content = new InspectionResultView();
             PageTile.Text = "검사 결과 이력";
         }

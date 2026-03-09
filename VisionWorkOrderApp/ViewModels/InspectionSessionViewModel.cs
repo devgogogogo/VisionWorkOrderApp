@@ -105,6 +105,12 @@ namespace VisionWorkOrderApp.ViewModels
             thread.IsBackground = true;
             thread.Start();
         }
+        public void StopCamera()
+        {
+            _isRunning = false;
+            thread?.Join();
+            videoCapture?.Release();
+        }
         // 카메라 루프 (계속 프레임 읽기)
         private void CameraLoop()
         {

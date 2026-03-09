@@ -19,13 +19,19 @@
                       SelectedItem="{Binding SelectedFilter}"
                       Width="100"
                       Height="30"/>
+            <Button Content="삭제"
+                    Command="{Binding DeleteCommand}"
+                    Width="60"
+                    Height="30"
+                    Margin="10,0,0,0"/>
         </StackPanel>
 
         <!-- 결과 목록 -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding FilteredResults}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  SelectedItem="{Binding SelectedResult}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50"/>
                 <DataGridTextColumn Header="시간" Binding="{Binding TimeStamp}" Width="150"/>

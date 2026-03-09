@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using VisionWorkOrderApp.Commands;
 using VisionWorkOrderApp.Models;
 
 namespace VisionWorkOrderApp.ViewModels
@@ -36,6 +39,15 @@ namespace VisionWorkOrderApp.ViewModels
 
             }
         }
+
+        public ICommand DeleteCommand { get; set; }
+
+        private InspectionResult _selectedResult;
+        public InspectionResult SelectedResult
+        {
+            get { return _selectedResult; }
+            set { _selectedResult = value; OnPropertyChanged(); }
+        }
         //생성자
         public InspectionResultViewModel()
         {
@@ -46,6 +58,7 @@ namespace VisionWorkOrderApp.ViewModels
             //필터 옵션 초기화
             FilterOptions = new ObservableCollection<string>() { "전체", "OK", "NG" };
             SelectedFilter = "전체";
+            DeleteCommand = new RelayCommand(DeleteResult);
         }
         // 필터 적용 메서드
         private void ApplyFilter() //화면 목록 전부 비우기
@@ -60,6 +73,21 @@ namespace VisionWorkOrderApp.ViewModels
                     // "NG" 선택   → Label 이 "NG" 인 것만 보여줌
                     FilteredResults.Add(result); //조건 맞는 것만 화면에 추가
                 }
+            }
+        }
+        private void DeleteResult()
+        {
+            if (SelectedResult == null) return;
+
+            MessageBoxResult result = MessageBox.Show($"{SelectedResult.ProductName}을(를) 삭제하시겠습니까?","삭제 확인",MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _db.InspectionResults.Remove(SelectedResult);
+                _db.SaveChanges();
+                _allResults.Remove(SelectedResult);
+                ApplyFilter();
+                MessageBox.Show("삭제되었습니다!");
             }
         }
     }
