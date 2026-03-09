@@ -56,9 +56,12 @@
 - ObservableCollection 으로 DB 변경사항 즉시 UI 반영
 - EF 변경 추적 활용으로 기존 객체 직접 수정 후 SaveChanges() 호출
 - ComboBox 바인딩으로 설비 선택 기능 구현
-  
-
-https://github.com/user-attachments/assets/2360637a-c69e-4a55-abae-a6a195177375
+- 추가 <br>
+![ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/3f10f630-cb2f-4869-af0e-08b1bd9c596a)
+- 수정 <br>
+![작업지시 수정](https://github.com/user-attachments/assets/c07cbe37-4ca2-4aff-8636-181ba4878c2d)
+- 삭제 <br>
+![작업지시 삭제](https://github.com/user-attachments/assets/4cffe3bf-137c-4228-b506-2d2eda0146c3)
 
 
 
