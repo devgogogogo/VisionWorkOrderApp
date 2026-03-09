@@ -73,11 +73,11 @@
 
 
 ### 3. 검사 결과 이력
-- DB에서 검사 결과 조회
-- 전체 / OK / NG 필터링
-- 검사 결과 삭제 기능 구현
-- ObservableCollection 으로 삭제 시 즉시 UI 반영
-- 삭제 확인 다이얼로그로 실수 방지 <br>
+- DB에서 전체 검사 결과 조회 후 ObservableCollection 으로 관리
+- 원본 목록(_allResults)과 필터 결과(FilteredResults) 분리하여 필터 전환 시 데이터 손실 없이 재필터링
+- ComboBox 선택 변경 시 SelectedFilter setter에서 ApplyFilter() 자동 호출로 즉시 반영
+- 삭제 시 DB 반영 후 현재 필터 상태 유지하며 목록 갱신
+- 삭제 확인 다이얼로그(MessageBox YesNo)로 실수 방지 <br>
 ![검사결과이력 필터 용량 낮은거](https://github.com/user-attachments/assets/60e66058-ead3-4983-9b3a-ea8c0fdc2985)
 
 
