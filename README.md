@@ -7,9 +7,7 @@
 > 제조 현장의 작업지시 관리와 OpenCV 비전 검사를 통합한 MES 애플리케이션입니다.
 > 카메라로 제품을 촬영하여 빨간 사과의 품질을 자동으로 판별하고 결과를 DB에 저장합니다.
 
-- WPF + MVVM 패턴으로 UI 와 비즈니스 로직 분리
-- Entity Framework 6 + MSSQL 로 DB 연동
-- OpenCvSharp4 로 실시간 카메라 영상처리 및 자동 품질 판별 구현
+
 
 
 
@@ -27,15 +25,11 @@
 ### 기타
 - [⑥ 트러블슈팅](#-트러블슈팅)
 - [⑦ 실행 방법](#-실행-방법)
-- [⑧ 배운 것](#-배운-것)
-
 
 
 ## 📅 개발 기간
 
 2026.02 ~ 2026.03
-
-
 
 ## 🛠 기술 스택
 
@@ -49,16 +43,21 @@
 
 
 ## ✅ 주요 기능
-
+- WPF + MVVM 패턴으로 UI 와 비즈니스 로직 분리
+- Entity Framework 6 + MSSQL 로 DB 연동
+- OpenCvSharp4 로 실시간 카메라 영상처리 및 자동 품질 판별 구현
 ### 1. 작업지시 관리
 - 작업지시 CRUD (추가 / 수정 / 삭제) 구현
 - Entity Framework 6 + MSSQL 연동으로 데이터 영구 저장
 - ObservableCollection 으로 DB 변경사항 즉시 UI 반영
 - EF 변경 추적 활용으로 기존 객체 직접 수정 후 SaveChanges() 호출
 - ComboBox 바인딩으로 설비 선택 기능 구현
-  
-
-https://github.com/user-attachments/assets/2360637a-c69e-4a55-abae-a6a195177375
+- 추가 <br>
+![ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/3f10f630-cb2f-4869-af0e-08b1bd9c596a)
+- 수정 <br>
+![작업지시 수정](https://github.com/user-attachments/assets/c07cbe37-4ca2-4aff-8636-181ba4878c2d)
+- 삭제 <br>
+![작업지시 삭제](https://github.com/user-attachments/assets/4cffe3bf-137c-4228-b506-2d2eda0146c3)
 
 
 
@@ -71,14 +70,6 @@ https://github.com/user-attachments/assets/2360637a-c69e-4a55-abae-a6a195177375
 ### 3. 검사 결과 이력
 - DB에서 검사 결과 조회
 - 전체 / OK / NG 필터링
-
-
-
-## 📸 화면 스크린샷
-
-> 스크린샷 추가 예정
-
-
 
 ## 💡 트러블슈팅
 
@@ -148,9 +139,3 @@ Update-Database
 
 ---
 
-## 📚 배운 것
-
-- WPF MVVM 패턴 구현
-- Entity Framework CRUD 및 변경 추적 이해
-- OpenCV 를 활용한 실시간 영상처리
-- 멀티스레딩 및 UI 스레드 처리
