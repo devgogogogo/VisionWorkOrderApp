@@ -7,9 +7,7 @@
 > 제조 현장의 작업지시 관리와 OpenCV 비전 검사를 통합한 MES 애플리케이션입니다.
 > 카메라로 제품을 촬영하여 빨간 사과의 품질을 자동으로 판별하고 결과를 DB에 저장합니다.
 
-- WPF + MVVM 패턴으로 UI 와 비즈니스 로직 분리
-- Entity Framework 6 + MSSQL 로 DB 연동
-- OpenCvSharp4 로 실시간 카메라 영상처리 및 자동 품질 판별 구현
+
 
 
 
@@ -49,7 +47,9 @@
 
 
 ## ✅ 주요 기능
-
+- WPF + MVVM 패턴으로 UI 와 비즈니스 로직 분리
+- Entity Framework 6 + MSSQL 로 DB 연동
+- OpenCvSharp4 로 실시간 카메라 영상처리 및 자동 품질 판별 구현
 ### 1. 작업지시 관리
 - 작업지시 CRUD (추가 / 수정 / 삭제) 구현
 - Entity Framework 6 + MSSQL 연동으로 데이터 영구 저장
