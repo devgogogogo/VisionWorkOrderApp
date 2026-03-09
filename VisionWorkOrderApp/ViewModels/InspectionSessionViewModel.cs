@@ -71,6 +71,9 @@ namespace VisionWorkOrderApp.ViewModels
         }
         public ICommand OkCommand { get; set; }
         public ICommand NgCommand { get; set; }
+        public ICommand StartCommand { get; set; }
+        public ICommand StopCommand { get; set; }
+
 
         //생성자  →  화면 열릴 때 필요한 것들 미리 준비하는 곳!
         public InspectionSessionViewModel()
@@ -81,11 +84,13 @@ namespace VisionWorkOrderApp.ViewModels
             // 2.커맨드 초기화(버튼 연결)
             OkCommand = new RelayCommand(AddOk);
             NgCommand = new RelayCommand(AddNg);
+            StartCommand = new RelayCommand(StartCamera);
+            StopCommand = new RelayCommand(StopCamera);
 
             // 3. 빈 컬렉션 초기화
             Results = new ObservableCollection<InspectionResult>();
-            //테스트 카메라
-            StartCamera();
+           
+            
         }
 
         // 카메라 시작 메서드

@@ -42,6 +42,9 @@
             <!-- 버튼 추가 -->
              <Button Content="OK 입력" Width="80" Height="40" Margin="10,0,5,0" Command="{Binding OkCommand}"/>
              <Button Content="NG 입력" Width="80" Height="40" Margin="5,0,0,0" Command="{Binding NgCommand}"/>
+             <Button Content="시작" Width="80" Height="40" Margin="10,0,5,0" Command="{Binding StartCommand}"/>
+             <Button Content="정지" Width="80" Height="40" Margin="5,0,0,0" Command="{Binding StopCommand}"/>
+
         </StackPanel>
         <!-- 카메라 화면 -->
         <Image x:Name="CameraView"

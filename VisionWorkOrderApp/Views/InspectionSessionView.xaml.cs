@@ -26,6 +26,11 @@ namespace VisionWorkOrderApp.Views
             InitializeComponent();
             this.DataContext = new InspectionSessionViewModel();    
         }
+        public InspectionSessionView(InspectionSessionViewModel vm)
+        {
+            InitializeComponent();
+            this.DataContext = vm;
+        }
     }
 }
 
