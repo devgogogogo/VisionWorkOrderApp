@@ -72,7 +72,9 @@
 - 전체 / OK / NG 필터링
 - 검사 결과 삭제 기능 구현
 - ObservableCollection 으로 삭제 시 즉시 UI 반영
-- 삭제 확인 다이얼로그로 실수 방지
+- 삭제 확인 다이얼로그로 실수 방지 <br>
+![검사결과이력 필터 용량 낮은거](https://github.com/user-attachments/assets/60e66058-ead3-4983-9b3a-ea8c0fdc2985)
+
 
 ## 💡 트러블슈팅
 
