@@ -88,19 +88,6 @@
   int index = WorkOrders.IndexOf(SelectedWorkOrder);
   WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
   _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
-### EF 변경 추적 미인식으로 수정 DB 미반영
-- **문제** : 수정 버튼 클릭 시 ObservableCollection의 화면 목록은 바뀌지만 DB에 반영되지 않음
-- **원인** : EF는 DbContext로 조회한 객체만 내부적으로 추적(Tracking) 상태로 관리함.
-  수정 시 새 WorkOrder 객체를 생성해 WorkOrders[index]에 교체하면
-  화면(ObservableCollection)에는 반영되지만,
-  새 객체는 DbContext가 모르는 Detached 상태이므로
-  SaveChanges() 호출 시 UPDATE 쿼리가 실행되지 않음
-  ```csharp
-  // 문제가 된 코드
-  int index = WorkOrders.IndexOf(SelectedWorkOrder);
-  WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
-  _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
-  ```
 
 ### 새 객체 교체 시 EF 변경 추적 누락으로 DB 미반영
 
