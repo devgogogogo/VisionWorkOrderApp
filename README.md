@@ -88,6 +88,54 @@
   int index = WorkOrders.IndexOf(SelectedWorkOrder);
   WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
   _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
+### EF 변경 추적 미인식으로 수정 DB 미반영
+- **문제** : 수정 버튼 클릭 시 ObservableCollection의 화면 목록은 바뀌지만 DB에 반영되지 않음
+- **원인** : EF는 DbContext로 조회한 객체만 내부적으로 추적(Tracking) 상태로 관리함.
+  수정 시 새 WorkOrder 객체를 생성해 WorkOrders[index]에 교체하면
+  화면(ObservableCollection)에는 반영되지만,
+  새 객체는 DbContext가 모르는 Detached 상태이므로
+  SaveChanges() 호출 시 UPDATE 쿼리가 실행되지 않음
+  ```csharp
+  // 문제가 된 코드
+  int index = WorkOrders.IndexOf(SelectedWorkOrder);
+  WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, NewStatus, NewEquipmentName);
+  _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
+  ```
+
+### 새 객체 교체 시 EF 변경 추적 누락으로 DB 미반영
+
+- **문제** : 수정 메서드에서 해당 인덱스에 새 객체를 생성해 교체하는 방식으로 구현했으나,
+  화면에는 반영되지만 DB에는 저장되지 않음
+
+- **원인** : ObservableCollection 항목을 새 객체로 교체하면 화면은 바뀌지만,
+  EF는 처음 조회한 객체만 추적하므로 새로 생성한 객체를 Detached 상태로 판단.
+  `SaveChanges()` 호출 시 변경사항 없음으로 처리됨
+
+  ```
+  기존 WorkOrders[0] → EF 추적 중인 객체 (주소: 0x001) { ProductName = "스마트폰" }
+  new WorkOrder()    → 새로운 객체          (주소: 0x002) { ProductName = "노트북"   }
+
+  WorkOrders[0] = new WorkOrder()
+  → 화면 : "노트북"으로 변경 ✅
+  → EF   : 0x001만 추적 중 → 0x002는 모르는 객체 → SaveChanges() 해도 변경 없음 ❌
+  ```
+
+  ```csharp
+  // 문제가 된 코드
+  int index = WorkOrders.IndexOf(SelectedWorkOrder);
+  WorkOrders[index] = new WorkOrder(NewProductName, NewQuantity, ...);
+  _db.SaveChanges(); // EF가 새 객체를 모르기 때문에 DB 반영 안됨
+  ```
+
+- **해결** : 새 객체를 생성하는 대신 EF가 추적 중인 기존 객체의 프로퍼티를 직접 수정 후
+  `SaveChanges()` 호출
+
+  ```csharp
+  // 해결 코드
+  SelectedWorkOrder.ProductName = NewProductName;
+  SelectedWorkOrder.Quantity = NewQuantity;
+  _db.SaveChanges(); // EF가 추적 중인 객체이므로 UPDATE 쿼리 실행 ✅
+  ```
 
 ### 카메라 스레드에서 UI 업데이트 시 InvalidOperationException
 - **문제** : 카메라 루프 스레드에서 BitmapSource 프로퍼티를 직접 업데이트하면
